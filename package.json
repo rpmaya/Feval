@@ -1,0 +1,23 @@
+{
+  "name": "feval",
+  "version": "1.0.0",
+  "description": "Smart Contracts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rpmaya/Feval.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rpmaya/Feval/issues"
+  },
+  "homepage": "https://github.com/rpmaya/Feval#readme",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "hardhat": "^2.18.1"
+  }
+}
