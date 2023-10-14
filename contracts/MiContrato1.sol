@@ -5,7 +5,7 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 // Contrato
-contract MiContrato extends Ownable {
+contract MiContrato1 extends Ownable {
     // Variable de estado
     uint256 public miVariable;
 
