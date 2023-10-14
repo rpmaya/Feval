@@ -2,6 +2,9 @@ require("@nomicfoundation/hardhat-toolbox");
 require('dotenv').config();
 
 const privateKey1 = process.env.privateKey1;
+const ethereumApiKey = process.env.ethereumApiKey;
+const alchemySepoliaApiKey = process.env.alchemySepoliaApiKey;
+const alchemyEthereumApiKey = process.env.alchemyEthereumApiKey;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 /*
@@ -16,11 +19,11 @@ module.exports = {
     hardhat: {
     },
     sepolia: {
-      url: "https://eth-sepolia.g.alchemy.com/v2/ok__EFkMZ3PUYd430g4ZqvDXwEjXX-zy",
+      url: `https://eth-sepolia.g.alchemy.com/v2/${alchemySepoliaApiKey}`,
       accounts: [privateKey1]
     },
     ethereum: {
-      url: "https://eth-mainnet.g.alchemy.com/v2/cctT2t_p86WvdRAMls954F3GZU9NLxjy",
+      url: `https://eth-mainnet.g.alchemy.com/v2/${alchemyEthereumApiKey}`,
       accounts: [privateKey1]
     }
   },
@@ -41,7 +44,10 @@ module.exports = {
   },
   mocha: {
     timeout: 40000
-  }
+  },
+  etherscan: {
+    apiKey: ethereumApiKey
+  },
 }
 
 
