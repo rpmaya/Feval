@@ -3,6 +3,7 @@ const hre = require("hardhat");
 async function main() {
   
   const valor = 1000;
+  
   const [deployer] = await hre.ethers.getSigners();
 
   const miContrato1 = await hre.ethers.deployContract("MiContrato1", [valor, deployer]);
