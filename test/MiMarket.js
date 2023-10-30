@@ -11,7 +11,7 @@ describe("MiMarket", function () {
         // Contracts are deployed using the first signer/account by default
         const [owner, ownerNFT, client] = await ethers.getSigners();
 
-        const value = ethers.parseEther("100.0");
+        const value = ethers.parseEther("100.0"); // 100*10^18
         const nftId = 1;
         const priceEth = ethers.parseEther("1.0");
         const priceMyToken = ethers.parseEther("10.0");
@@ -28,7 +28,7 @@ describe("MiMarket", function () {
         const MiMarket = await ethers.getContractFactory("MiMarket");
         const miMarket = await MiMarket.deploy(owner.address);
 
-        return { miToken, miSemi, miMarket, owner, ownerNFT, client, value, nftId, priceEth, priceMyToken, period};
+        return { miToken, miSemi, miMarket, owner, ownerNFT, client, value, nftId, priceEth, priceMyToken, period };
     }
 
     describe("Deployment", function () {
@@ -59,7 +59,7 @@ describe("MiMarket", function () {
         });
 
         it("Should get a rent with ETH", async function () {
-            const { miToken, miSemi, miMarket, ownerNFT, client, nftId, priceEth, priceMyToken, period } = await loadFixture(deployMiMarketFixture);
+            const { miSemi, miMarket, ownerNFT, client, nftId, priceEth, priceMyToken, period } = await loadFixture(deployMiMarketFixture);
             
             const beforeRenting = ethers.formatEther(await ethers.provider.getBalance(ownerNFT));
 
