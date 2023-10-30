@@ -9,12 +9,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract MiMarket is Ownable, ERC1155Holder {
 
     struct RentalInfo {
-        address owner;
+        address owner; 
         address nftContract;
         uint256 nftId;
         uint256 priceEth;
         uint256 priceMyToken;
-        uint initial;
+        uint initial; //timestamp when rent
         uint period; //seconds
         address renter;
         bool rented;  
@@ -33,15 +33,17 @@ contract MiMarket is Ownable, ERC1155Holder {
 
      // From NFT owner
     function putRent(address nftContract, uint256 nftId, uint256 priceEth, uint256 priceMyToken, uint period) public {
+        require(IERC1155(nftContract).isApprovedForAll(msg.sender, address(this)), "It needs grants");
         IERC1155(nftContract).safeTransferFrom(msg.sender, address(this), nftId, 1, "");
         rentalsCounter++;
-        //renters[msg.sender].push(rentalsCounter);
+        
         rentals[rentalsCounter] = RentalInfo(msg.sender, nftContract, nftId, priceEth, priceMyToken, 0, period, msg.sender, false);
         emit Rental(rentalsCounter, msg.sender);
      }
 
      function updateRent(uint256 rentalId, uint256 priceEth, uint256 priceMyToken, uint period) public {
-        require(msg.sender == rentals[rentalId].owner, "You are not the owner or it is still rented");
+        require(msg.sender == rentals[rentalId].owner, "You are not the owner");
+        require(!rentals[rentalId].rented, "It is still rented");
         rentals[rentalId] = RentalInfo(msg.sender, rentals[rentalId].nftContract, rentals[rentalId].nftId, priceEth, priceMyToken, 0, period, msg.sender, false);
      }
 
@@ -69,6 +71,8 @@ contract MiMarket is Ownable, ERC1155Holder {
 
     function getRentMyToken(uint256 rentalId, address tokenAddress) public {
         require(!rentals[rentalId].rented, "It is already rented");
+        require(IERC20(tokenAddress).balanceOf(msg.sender) >= rentals[rentalId].priceMyToken, "Balance not enough");
+        require(IERC20(tokenAddress).allowance(msg.sender, address(this)) >= rentals[rentalId].priceMyToken, "Allowance not enough"); 
         IERC20(tokenAddress).transferFrom(msg.sender, rentals[rentalId].owner, rentals[rentalId].priceMyToken);
         _getRent(rentalId);
      }
