@@ -23,7 +23,7 @@ describe("MiMarket", function () {
 
         const MiSemi = await ethers.getContractFactory("MiSemi");
         const miSemi = await MiSemi.deploy(owner.address);
-        await miSemi.mint(ownerNFT, 1, 1, "0x");
+        await miSemi.mint(ownerNFT, 1, 3, "0x");
      
         const MiMarket = await ethers.getContractFactory("MiMarket");
         const miMarket = await MiMarket.deploy(owner.address);
@@ -39,7 +39,7 @@ describe("MiMarket", function () {
             expect(await miToken.balanceOf(client.address)).to.equal(value);
 
             expect(await miSemi.owner()).to.equal(owner.address);
-            expect(await miSemi.balanceOf(ownerNFT.address, nftId)).to.equal(1);
+            expect(await miSemi.balanceOf(ownerNFT.address, nftId)).to.equal(3);
 
             expect(await miMarket.owner()).to.equal(owner.address);
         });
@@ -86,6 +86,10 @@ describe("MiMarket", function () {
 
             expect(await miToken.balanceOf(ownerNFT)).to.equal(priceMyToken);
             //console.log("Final:", ethers.formatEther(await miToken.balanceOf(ownerNFT)));
+
+            await miMarket.connect(ownerNFT).putRent(miSemi, nftId, priceEth, priceMyToken, period);
+            await miMarket.connect(ownerNFT).putRent(miSemi, nftId, priceEth, priceMyToken, period);
+            console.log(await miMarket.getAvailables())
         });
 
         it("Should revert with the right error", async function () {

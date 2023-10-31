@@ -33,6 +33,7 @@ contract MiMarket is Ownable, ERC1155Holder {
 
      // From NFT owner
     function putRent(address nftContract, uint256 nftId, uint256 priceEth, uint256 priceMyToken, uint period) public {
+        require(period > 0, "Period must be greater than zero");
         require(IERC1155(nftContract).isApprovedForAll(msg.sender, address(this)), "It needs grants");
         IERC1155(nftContract).safeTransferFrom(msg.sender, address(this), nftId, 1, "");
         rentalsCounter++;
@@ -85,5 +86,29 @@ contract MiMarket is Ownable, ERC1155Holder {
         rentals[rentalId].renter = rentals[rentalId].owner;
         rentals[rentalId].initial = 0;
         rentals[rentalId].rented = false;
+     }
+
+     function _getSize() internal view returns (uint256) {
+        uint size = 0;
+        for (uint256 i=1; i<=rentalsCounter; i++) {
+            if (!rentals[i].rented && rentals[i].period > 0) {
+                size++;
+            }
+        }
+        return size;
+     }
+
+     // To read the available NFTs
+     function getAvailables() public view returns (RentalInfo[] memory) {
+        uint size = _getSize();
+        RentalInfo[] memory availables = new RentalInfo[](size);
+
+        uint cont = 0;
+        for (uint256 i=1; i<=rentalsCounter; i++) {
+            if (!rentals[i].rented && rentals[i].period > 0) {
+                availables[cont++] = rentals[i];
+            }
+        }
+        return availables;
      }
 }
