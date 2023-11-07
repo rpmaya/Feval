@@ -21,7 +21,7 @@ contract MiMarket is Ownable, ERC1155Holder {
     }
 
     uint256 public rentalsCounter; // rentalId
-    mapping(uint256 => RentalInfo) public rentals;
+    mapping(uint256 => RentalInfo) public rentals; 
     //mapping(address => uint256[]) public renters;
 
     event Rental(uint256 id, address owner);
@@ -88,7 +88,7 @@ contract MiMarket is Ownable, ERC1155Holder {
         rentals[rentalId].rented = false;
      }
 
-     function _getSize() internal view returns (uint256) {
+     function _getSize() private view returns (uint256) {
         uint size = 0;
         for (uint256 i=1; i<=rentalsCounter; i++) {
             if (!rentals[i].rented && rentals[i].period > 0) {
